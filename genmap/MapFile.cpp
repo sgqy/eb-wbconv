@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "conf.h"
+
 #include "MapFile.h"
 
 MapFile::MapFile()
@@ -56,7 +58,7 @@ void MapFile::_set_title(const wchar_t* Name)
     int ccnt = 0;
     bool blst = false;
     wcpc(1200, ori, j*2, 65001, dst, ccnt, '_', blst);
-    printf("%d", ccnt);
+    //printf("%d", ccnt);
     dst[ccnt] = 0;
 
     _title = dst;
@@ -117,24 +119,35 @@ Match:
     sscanf(Line, "%s %s", key, raw);
     raw_conv(raw);
 
-    _map[std::string(key)] = std::string(raw);
+    std::string value;
+    if (strlen(raw) == 0)
+    {
+        strcpy(raw, key);
+        value = std::string("&") + std::string(raw) + std::string(";");
+    }
+    else
+    {
+        value = raw;
+    }
+
+    _map[std::string(key)] = value;
 }
 
 MapFile::MapFile(const char* InBuff)
 {
 }
 
-int MapFile::get(std::string& Rslt, const std::string& Key) const
+int MapFile::exchange(std::string& Rslt, const std::string& Key) const
 {
     return FIND_SUCCESS;
 }
 
-std::map<std::string, std::string>& MapFile::get_map() 
+std::map<std::string, std::string>& MapFile::list() 
 {
     return _map;
 }
 
-std::string& MapFile::get_title()
+std::string& MapFile::title()
 {
     return _title;
 }

@@ -14,10 +14,8 @@
 
 #include <Windows.h>
 
-#define STATIC_GETOPT
 #include "getopt.h"
 #include "zlib.h"
-#include "conf.h"
 #include "surrogate.h"
 
 #include <map>

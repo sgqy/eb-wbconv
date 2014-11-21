@@ -1,5 +1,7 @@
 
 #include "stdafx.h"
+#include "conf.h"
+
 #include "surrogate.h"
 
 int utf16_to_ucs2(wchar_t* dst, const int src)

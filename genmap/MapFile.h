@@ -24,9 +24,9 @@ public:
     MapFile(const char* InBuff);
 
     // Dest: UTF-8 string 获取配对
-    int get(std::string& Rslt, const std::string& Key) const;
+    int exchange(std::string& Rslt, const std::string& Key) const;
 
     // 获取元素
-    std::string& get_title();
-    std::map<std::string, std::string>& get_map();
+    std::string& title();
+    std::map<std::string, std::string>& list();
 };

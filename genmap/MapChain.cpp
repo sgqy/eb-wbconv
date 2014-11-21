@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "conf.h"
+
 #include "MapFile.h"
 #include "MapChain.h"
 
@@ -17,7 +19,7 @@ int MapChain::get(std::string& Rslt, const std::string& Title, const std::string
     }
     else
     {
-        return (i->second).get(Rslt, Key);
+        return (i->second).exchange(Rslt, Key);
     }
 }
 

@@ -4,6 +4,7 @@
 // 注意转换前后长度均指字节数，非字符数
 
 #include "stdafx.h"
+#include "conf.h"
 
 #define SENTENCE_LEN 4096 // 每行最大长度 4 MiB // 后续版本将添加自定义缓存容量
 #define MEMPROTECT mem_s

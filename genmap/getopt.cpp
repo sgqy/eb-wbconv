@@ -1,5 +1,4 @@
 
-#include "stdafx.h"
 /* Getopt for Microsoft C
 This code is a modification of the Free Software Foundation, Inc.
 Getopt library for parsing command line argument the purpose was
@@ -36,6 +35,8 @@ PROFITS, BUSINESS INTERRUPTION, LOSS OF PROGRAMS OR OTHER DATA ON
 YOUR INFORMATION HANDLING SYSTEM OR OTHERWISE, EVEN If WE ARE
 EXPRESSLY ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 */
+#include "stdafx.h"
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
 #include <stdio.h>
