@@ -90,7 +90,7 @@ static void raw_conv(char* s)
     {
         utf16 = strtol(si, &si, 16);
         if (!utf16) break;
-        ti += utf16_to_ucs2(temp + ti, utf16);
+        ti += utf16_to_ucs2(temp + ti, utf16); // 对 \u010000 到 \u10FFFF 进行对应处理
     }
     int taglen = 0;
     bool lost = false;
@@ -114,16 +114,18 @@ void MapFile::_push(const char* Line)
     }
     return;
 Match:
-    char key[10];
-    char raw[64];
+    char key[10]; // 左边的数值
+    char raw[64]; // 右边的对应项
     sscanf(Line, "%s %s", key, raw);
-    raw_conv(raw);
+    raw_conv(raw); // 把对应项包含的数字转换为 utf-8 编码
 
     std::string value;
     if (strlen(raw) == 0)
     {
         strcpy(raw, key);
-        value = std::string("&") + std::string(raw) + std::string(";");
+        value = std::string("\x01")
+            //+ std::string(raw) + std::string(";")
+            ;
     }
     else
     {
@@ -133,13 +135,54 @@ Match:
     _map[std::string(key)] = value;
 }
 
-MapFile::MapFile(const char* InBuff)
-{
-}
-
+// Format of Key: "&hA001;"
 int MapFile::exchange(std::string& Rslt, const std::string& Key) const
 {
-    return FIND_SUCCESS;
+    int ret = FIND_SUCCESS;
+    
+    auto pos = Key.find(';');
+    if (pos == std::string::npos) throw DATA_INPUT_ERR;
+    std::string Raw = Key.substr(1, pos-1); // 不应包含末尾的分号
+
+    // original: std::map<std::string, std::string>::const_iterator
+    auto it = _map.find(Raw);
+    if (it == _map.end()) // 表中不存在结果
+    {
+        if (Raw[0] == 'g' && _gbk_support)
+        {
+            unsigned char gbk[4] = { 0 }; // length: 2
+            char cnv[12] = { 0 }; // length: 3~4
+            
+            char temp[3] = { 0 };
+            temp[0] = Raw[1];
+            temp[1] = Raw[2];
+            gbk[0] = strtol(temp, 0, 16);
+            temp[0] = Raw[3];
+            temp[1] = Raw[4];
+            gbk[1] = strtol(temp, 0, 16);
+
+            int ccnt = 0;
+            bool blst = false;
+            wcpc(936, gbk, 2, 65001, cnv, ccnt, '_', blst);
+            Rslt = cnv;
+        }
+        else
+        {
+            Rslt = Key;
+            ret = FIND_FALLBACK;
+        }
+    }
+    else // 表中存在结果
+    {
+        Rslt = it->second;
+        if (Rslt[0] == '\x01')
+        {
+            Rslt = Key;
+            ret = FIND_FALLBACK;
+        }
+    }
+
+    return ret;
 }
 
 std::map<std::string, std::string>& MapFile::list() 

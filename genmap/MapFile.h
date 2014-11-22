@@ -21,7 +21,6 @@ class MapFile
 public:
     MapFile();
     MapFile(const wchar_t* InFile);
-    MapFile(const char* InBuff);
 
     // Dest: UTF-8 string 获取配对
     int exchange(std::string& Rslt, const std::string& Key) const;
@@ -29,4 +28,21 @@ public:
     // 获取元素
     std::string& title();
     std::map<std::string, std::string>& list();
+
+    // 二进制输入输出
+    int Import(const char* Buf);
+    int Export(char* Buf);
+
+    // 二进制保存格式:
+    //struct fmt
+    //{
+    //    int buf_length;
+    //    int entry_count;
+    //    char* title;
+    //    struct data
+    //    {
+    //        char* key;
+    //        char* data;
+    //    };
+    //};
 };
