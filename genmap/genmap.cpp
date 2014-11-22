@@ -20,37 +20,27 @@ int wmain(int argc, wchar_t* argv[])
 {
     try
     {
-        /////////////////////////////////////////////
-        ////_setmode(fileno(stdout), _O_U8TEXT);
-        //ofstream of;
-        //of.open("o.txt");
-        //Start:
-        //string str;
-        //cin >> str;
-        //auto pos = str.find(';');
-        //if (pos == string::npos) throw DATA_INPUT_ERR;
-        //string Raw = str.substr(1, pos-1);
-        //cout << Raw << endl;
-
-        //unsigned char gbk[4] = { 0 }; // length: 2
-        //char cnv[12] = { 0 }; // length: 3~4
-
-        //char temp[3] = { 0 };
-        //temp[0] = Raw[1];
-        //temp[1] = Raw[2];
-        //gbk[0] = strtol(temp, 0, 16);
-        //temp[0] = Raw[3];
-        //temp[1] = Raw[4];
-        //gbk[1] = strtol(temp, 0, 16);
-
-        //int ccnt = 0;
-        //bool blst = false;
-        //wcpc(936, gbk, 2, 65001, cnv, ccnt, '_', blst);
-
-        //cout << "gbk: " << gbk << endl;
-        //of << "utf8 " << cnv << endl;
-        //goto Start;
-        /////////////////////////////////////////////
+        if (argc != 2) return -1;
+        
+        ofstream of;
+        MapFile mf(argv[1]);
+        
+        of.open("test_rslt.txt");
+        
+        char Key[50];
+        string Rslt;
+        while (1)
+        {
+            cin >> Key;
+            for (int i = 2; i < strlen(Key); ++i)
+            {
+                Key[i] = toupper(Key[i]);
+            }
+            mf.exchange(Rslt, Key);
+            of << Rslt << endl;
+        }
+        
+        of.close();
     }
     catch (int& e)
     {
@@ -65,4 +55,3 @@ int wmain(int argc, wchar_t* argv[])
 
 	return 0;
 }
-
