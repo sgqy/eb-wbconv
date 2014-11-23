@@ -6,8 +6,6 @@ class MapFile
     std::string _title; // 词典名称（重要）
     std::map<std::string, std::string> _map;
     int _len; // map 的长度，用于文件存储
-    bool _sys_gbk_enable;
-    bool _gbk_support; // 用于日汉词典
 
     // 处理单行
     void _push(const char* Line);
@@ -15,6 +13,11 @@ class MapFile
     void _set_title(const wchar_t* Name);
     // 初始化变量
     void mf_init();
+
+//public:
+    // 以下二者均为 ENABLE_GBK_CONV 方可转换
+    int _sys_gbk_enable; // 系统环境检测
+    int _book_gbk_enable; // 书籍本身是否支持 GBK, 注意和系统环境无关
 
 public:
     MapFile();
@@ -43,6 +46,7 @@ public:
     //{
     //    int buf_length;
     //    int entry_count;
+    //    int book_gbk;
     //    char* title;
     //    struct data
     //    {

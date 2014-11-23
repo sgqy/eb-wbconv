@@ -11,6 +11,8 @@
 #define DATA_INPUT_ERR 8
 #define UCS2_INPUT_ERR 9
 
+#define ENABLE_GBK_CONV  1
+#define DISABLE_GBK_CONV 0
 
 // Safe malloc
 #define mem_s(x) (x+128)

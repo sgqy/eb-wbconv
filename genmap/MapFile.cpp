@@ -7,14 +7,14 @@
 void MapFile::mf_init()
 {
     _len = 0;
-    _gbk_support = false;
+    _book_gbk_enable = DISABLE_GBK_CONV;
     if (IsValidCodePage(936) == TRUE)
     {
-        _sys_gbk_enable = true;
+        _sys_gbk_enable = ENABLE_GBK_CONV;
     }
     else
     {
-        _sys_gbk_enable = false;
+        _sys_gbk_enable = DISABLE_GBK_CONV;
     }
 }
 
@@ -123,7 +123,7 @@ void MapFile::_push(const char* Line)
     switch (Line[0])
     {
     case 'g':
-        _gbk_support = true;
+        _book_gbk_enable = ENABLE_GBK_CONV; // 对应表本身支持 GBK, 和系统无关!
     case 'h':
     case 'z':
     case 'c':
@@ -168,8 +168,7 @@ int MapFile::exchange(std::string& Rslt, const std::string& Key) const
     auto it = _map.find(Raw);
     if (it == _map.end()) // 表中不存在结果
     {
-        if (Raw[0] == 'g' && _gbk_support == _sys_gbk_enable) // 包含 gbk 对照的直接解码
-            // 后面要判断和 true 的相等, 不要直接用 if(... && _gbk_support)
+        if (Raw[0] == 'g' && _book_gbk_enable == ENABLE_GBK_CONV && _sys_gbk_enable == ENABLE_GBK_CONV) // 包含 gbk 对照的直接解码
         {
             unsigned char gbk[4] = { 0 }; // length: 2
             char cnv[12] = { 0 }; // length: 3~4
@@ -214,10 +213,11 @@ const std::string& MapFile::title() const
 // 从线性存储中读取 MapFile 结构, 返回导入条目
 int MapFile::Import(const char* Buf)
 {
-    // 获得两个数据
+    // 获得数据
     int* pCount = (int*)Buf;
     int buf_length = *pCount++;
     int entry_count = *pCount++;
+    _book_gbk_enable = *pCount++;
 
     // 开始获取相关信息
     char* pEntry = (char*)pCount;
@@ -251,6 +251,7 @@ int MapFile::Export(char*& Buf) const
     int buf_length =
         + 4                 // buf_length
         + 4                 // entry_count
+        + 4                 // book_gbk
         + _title.size() + 1 // title_length + \0
         ;
     int entry_count = _map.size();
@@ -269,10 +270,11 @@ int MapFile::Export(char*& Buf) const
 
     Buf = new char[mem_s(buf_length)];
     
-    // 写入两个数据
+    // 写入数据
     int* pCount = (int*)Buf;
     *pCount++ = buf_length;
     *pCount++ = entry_count;
+    *pCount++ = _book_gbk_enable;
 
     // 开始录入
     char* pEntry = (char*)pCount;
