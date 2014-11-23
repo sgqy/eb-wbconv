@@ -73,7 +73,7 @@ void MapFile::_set_title(const wchar_t* Name)
 
     int ccnt = 0;
     bool blst = false;
-    wcpc(1200, ori, j*2, 65001, dst, ccnt, '_', blst);
+    wcpc(1200, ori, j * 2, 65001, dst, ccnt, '_', blst);
     //printf("%d", ccnt);
     dst[ccnt] = 0;
 
@@ -110,7 +110,7 @@ static void val_conv(char* s)
     }
     int taglen = 0;
     bool lost = false;
-    wcpc(1200, temp, ti*2, 65001, s, taglen, '_', lost);
+    wcpc(1200, temp, ti * 2, 65001, s, taglen, '_', lost);
     s[taglen] = 0;
 
     delete temp;
@@ -159,20 +159,43 @@ Match:
 int MapFile::exchange(std::string& Rslt, const std::string& Key) const
 {
     int ret = FIND_SUCCESS;
-    
-    auto pos = Key.find(';');
-    if (pos == std::string::npos) throw DATA_INPUT_ERR;
-    std::string Raw = Key.substr(1, pos-1); // 不应包含末尾的分号
+
+    char key_cnv[10] = { 0 }; // 只把数字变成大写
+    char key_raw[10] = { 0 }; // 用于查询的部分
+    int key_len = Key.size();
+
+    for (int i = 0; i < key_len; ++i)
+    {
+        if (i >= 2 && i < key_len - 1)
+        {
+            key_raw[i-1] = key_cnv[i] = toupper(Key[i]); // 数字部分, 注意不是 i-2
+        }
+        else if (i == 1)
+        {
+            key_raw[i-1] = key_cnv[i] = Key[i]; // chgz 四个开头
+        }
+        else
+        {
+            key_cnv[i] = Key[i]; // '&' 和 ';'
+        }
+    }
+
+    std::string Raw = key_raw; // 不应包含末尾的分号
+
+    ////////////// 开始替换 //////////////
 
     // original: std::map<std::string, std::string>::const_iterator
     auto it = _map.find(Raw);
     if (it == _map.end()) // 表中不存在结果
     {
-        if (Raw[0] == 'g' && _book_gbk_enable == ENABLE_GBK_CONV && _sys_gbk_enable == ENABLE_GBK_CONV) // 包含 gbk 对照的直接解码
+        if (Raw[0] == 'g'
+            && _book_gbk_enable == ENABLE_GBK_CONV
+            && _sys_gbk_enable == ENABLE_GBK_CONV
+            ) // 包含 gbk 对照的直接解码
         {
             unsigned char gbk[4] = { 0 }; // length: 2
             char cnv[12] = { 0 }; // length: 3~4
-            
+
             char temp[3] = { 0 };
             temp[0] = Raw[1];
             temp[1] = Raw[2];
@@ -188,7 +211,7 @@ int MapFile::exchange(std::string& Rslt, const std::string& Key) const
         }
         else
         {
-            Rslt = Key;
+            Rslt = key_cnv;
             ret = FIND_FALLBACK;
         }
     }
@@ -249,7 +272,7 @@ int MapFile::Import(const char* Buf)
 int MapFile::Export(char*& Buf) const
 {
     int buf_length =
-        + 4                 // buf_length
+        +4                 // buf_length
         + 4                 // entry_count
         + 4                 // book_gbk
         + _title.size() + 1 // title_length + \0
@@ -267,9 +290,9 @@ int MapFile::Export(char*& Buf) const
 
     if (Buf) delete Buf;
     Buf = 0;
-
+        
     Buf = new char[mem_s(buf_length)];
-    
+
     // 写入数据
     int* pCount = (int*)Buf;
     *pCount++ = buf_length;

@@ -33,7 +33,6 @@ public:
     const std::string& title() const;
     const std::map<std::string, std::string>& list() const;
 
-    // 二进制输入输出
     // 从线性存储中按格式读取类的数据, 返回条目的数量
     int Import(const char* Buf);
 
