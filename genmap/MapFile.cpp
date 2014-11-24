@@ -28,7 +28,7 @@ MapFile::MapFile(const wchar_t* InFile)
     mf_init(); // 要单独设计一个初始化函数, 不要调用其他构造函数
 
     FILE* fp = 0;
-    _wfopen_s(&fp, InFile, L"r");
+    _wfopen_s(&fp, InFile, L"r"); // MSVC
 
     if (!fp) throw FILE_OPEN_ERR;
 
@@ -43,6 +43,7 @@ MapFile::MapFile(const wchar_t* InFile)
     }
 
     delete temp;
+    fclose(fp);
     _set_title(InFile);
 }
 
@@ -133,14 +134,15 @@ void MapFile::_push(const char* Line)
 Match:
     char key[10]; // 左边的数值
 
+    char val[240]; // 右边的对应项（文本）
+    sscanf(Line, "%s %s", key, val);
+
     int key_len = strlen(key);
     for (int i = 1; i < key_len; ++i)
     {
         key[i] = toupper(key[i]);
     }
 
-    char val[64]; // 右边的对应项（文本）
-    sscanf(Line, "%s %s", key, val);
     val_conv(val); // 把对应项包含的数字转换为 utf-8 编码
 
     std::string value;
@@ -237,13 +239,13 @@ const std::string& MapFile::title() const
 int MapFile::Import(const char* Buf)
 {
     // 获得数据
-    int* pCount = (int*)Buf;
-    int buf_length = *pCount++;
-    int entry_count = *pCount++;
-    _book_gbk_enable = *pCount++;
+    mf_hdr_t* hdr = (mf_hdr_t*)Buf;
+    int buf_length = hdr->file_length;
+    int entry_count = hdr->entry_count;
+    _book_gbk_enable = hdr->is_book_gbk;
 
     // 开始获取相关信息
-    char* pEntry = (char*)pCount;
+    char* pEntry = (char*)hdr;
     char temp[32] = { 0 }; // 建立临时存储站点
 
     char* pTemp = temp;
@@ -269,38 +271,22 @@ int MapFile::Import(const char* Buf)
 }
 
 // 线性保存 MapFile 结构里的内容, 返回缓冲区大小
-int MapFile::Export(char*& Buf) const
+int MapFile::Export(char* Buf) const
 {
-    int buf_length =
-        +4                 // buf_length
-        + 4                 // entry_count
-        + 4                 // book_gbk
-        + _title.size() + 1 // title_length + \0
-        ;
+    int buf_length = LinearSize();
     int entry_count = _map.size();
 
     auto it_end = _map.end();
 
-    // 计算输出区长度
-    for (auto it = _map.begin(); it != it_end; ++it)
-    {
-        buf_length += it->first.size() + 1;
-        buf_length += it->second.size() + 1;
-    }
-
-    if (Buf) delete Buf;
-    Buf = 0;
-        
-    Buf = new char[mem_s(buf_length)];
-
     // 写入数据
-    int* pCount = (int*)Buf;
-    *pCount++ = buf_length;
-    *pCount++ = entry_count;
-    *pCount++ = _book_gbk_enable;
+    mf_hdr_t* hdr = (mf_hdr_t*)Buf;
+    hdr->file_length = buf_length;
+    hdr->entry_count = entry_count;
+    hdr->is_book_gbk = _book_gbk_enable;
+    ++hdr;
 
     // 开始录入
-    char* pEntry = (char*)pCount;
+    char* pEntry = (char*)hdr;
     const char* pSour = 0;
     pSour = _title.c_str();
     while (*pEntry++ = *pSour++);
@@ -311,6 +297,25 @@ int MapFile::Export(char*& Buf) const
         while (*pEntry++ = *pSour++);
         pSour = it->second.c_str();
         while (*pEntry++ = *pSour++);
+    }
+
+    return buf_length;
+}
+
+int MapFile::LinearSize() const
+{
+    int buf_length =
+          sizeof(mf_hdr_t)  // header_length
+        + _title.size() + 1 // title_length + \0
+        ;
+
+    auto it_end = _map.end();
+
+    // 计算输出区长度
+    for (auto it = _map.begin(); it != it_end; ++it)
+    {
+        buf_length += it->first.size() + 1;
+        buf_length += it->second.size() + 1;
     }
 
     return buf_length;

@@ -3,13 +3,20 @@
 #pragma pack(1)
 
 // Package of MapFile
-struct mfp_hdr
+// -------------------------
+// |mfp_hdr|compressed_data| -> unzip_size DO NOT contain mfp_hdr
+// -------------------------
+
+struct mfp_hdr_t
 {
     int hdr_length;
     int entry_count;
+    int info_length;
+    int zipped_size;
+    int unzip_size;
 };
 
-struct mfp_info
+struct mfp_info_t
 {
     int offset;
     int length;
@@ -27,6 +34,9 @@ public:
 
     // 从文件读入, 需要 wmain 的支持
     MapChain(const wchar_t* InFile);
+
+    // 写入文件
+    void write(const wchar_t* OutFile);
 
     // 获取配对
     // Input: "&hA001;", "DICNAME"  Output: UTF-8 String

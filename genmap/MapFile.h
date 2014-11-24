@@ -1,5 +1,17 @@
 #pragma once
 
+#pragma pack(1)
+
+struct mf_hdr_t
+{
+    int file_length;
+    int entry_count;
+    int is_book_gbk;
+    // char* title;
+};
+
+#pragma pack()
+
 // 对单个文件进行保存
 class MapFile
 {
@@ -37,8 +49,11 @@ public:
     int Import(const char* Buf);
 
     // 线性保存类中的数据, 返回 Buf 的长度
-    // WARNING: Allocating memory WITHOUT delete!!!
-    int Export(char*& Buf) const;
+    // Call LinearSize() to allocate new memory first!
+    int Export(char* Buf) const;
+
+    // 计算线性保存数据的长度
+    int LinearSize() const;
 
     // 二进制保存格式:
     //struct fmt

@@ -7,6 +7,7 @@
 
 #define FILE_OPEN_ERR 10
 #define MEMORY_ERR    11
+#define ZIP_ERROR      5
 
 #define DATA_INPUT_ERR 8
 #define UCS2_INPUT_ERR 9

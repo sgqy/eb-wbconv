@@ -18,27 +18,25 @@ int wmain(int argc, wchar_t* argv[])
 {
     try
     {
-        if (argc != 2) throw 1;
+        if (argc < 2) throw 1;
 
         MapChain mfp;
-        mfp += MapFile(argv[1]);
-
-        string A;
-        string B;
-        ofstream of;
-        of.open("out.txt", ios::trunc);
-
-        while (1)
+        for (int i = 1; i < argc; ++i)
         {
-            cin >> A;
-            mfp.exchange(B, A, string("InputA"));
-            of << B << endl;
+            mfp += MapFile(argv[i]);
         }
+
+        mfp.write(L"o.txt");
     }
     catch (int& e)
     {
         printf("[-]Error: %d\n", e);
         return e;
+    }
+    catch (std::bad_alloc e)
+    {
+        printf("[-]memory\n");
+        return MEMORY_ERR;
     }
     catch (...)
     {
