@@ -28,7 +28,7 @@ MapChain::MapChain(const wchar_t* InFile)
 
     Import(buf);
 
-    delete buf;
+    delete [] buf;
 }
 
 void MapChain::write(const wchar_t* OutFile)
@@ -43,7 +43,7 @@ void MapChain::write(const wchar_t* OutFile)
     fwrite(buf, sizeof(char), size, fp);
 
     fclose(fp);
-    delete buf;
+    delete [] buf;
 }
 
 MapChain& MapChain::operator += (const MapFile& mf)
@@ -93,7 +93,7 @@ int MapChain::Export(char*& Buf) const
     hdr.entry_count = _mfp.size();
 
     // 建立文件列表 (包含于被压缩部分)
-    mfp_info_t* info_list = new mfp_info_t[hdr.entry_count];
+    mfp_info_t* pInfo = new mfp_info_t[hdr.entry_count];
     hdr.info_length = hdr.entry_count * sizeof(mfp_info_t);
 
     auto it_end = _mfp.end();
@@ -104,16 +104,16 @@ int MapChain::Export(char*& Buf) const
     int offset = 0;
     for (/* i = 0, it = beg */; it != it_end && i < hdr.entry_count; ++it, ++i)
     {
-        info_list[i].offset = offset;
-        offset += (info_list[i].length = it->second.LinearSize());
+        pInfo[i].offset = offset;
+        offset += (pInfo[i].length = it->second.LinearSize());
     }
 
     hdr.unzip_size = hdr.info_length + offset;
 
     // 开始录入
     char* Raw = new char[mem_s(hdr.unzip_size)];
-    memcpy(Raw, info_list, hdr.info_length);
-    delete info_list;
+    memcpy(Raw, pInfo, hdr.info_length);
+    delete [] pInfo;
 
     char* pRaw = Raw + hdr.info_length;
     for (it = _mfp.begin(), i = 0; it != it_end && i < hdr.entry_count; ++it, ++i)
@@ -131,19 +131,58 @@ int MapChain::Export(char*& Buf) const
         throw ZIP_ERROR;
     }
     hdr.zipped_size = zipped_size;
-    delete Raw;
+    delete [] Raw;
 
     // 输出
-    delete Buf;
+    delete [] Buf;
     Buf = new char[mem_s(hdr.hdr_length + hdr.zipped_size)];
     memcpy(Buf, &hdr, hdr.hdr_length);
     memcpy(Buf + hdr.hdr_length, Zipped, zipped_size);
-    delete Zipped;
+    delete [] Zipped;
 
     return (hdr.hdr_length + hdr.zipped_size);
 }
 
 int MapChain::Import(const char* Buf)
 {
+    mfp_hdr_t* phdr = (mfp_hdr_t*)Buf;
+    mfp_hdr_t hdr = *phdr;
+
+    // 解压
+    const char* zipped = (char*)(phdr + 1);
+
+    // |mfp_info|data
+    char* unzip = new char[mem_s(hdr.unzip_size)];
+    int unzip_size_out = hdr.unzip_size;
+    if (uncompress((Bytef*)unzip, (uLongf*)&unzip_size_out,
+        (Bytef*)zipped, hdr.zipped_size) != Z_OK)
+    {
+        throw ZIP_ERROR;
+    }
+    if (unzip_size_out != hdr.unzip_size)
+    {
+        throw DATA_INPUT_ERR;
+    }
+
+    // 读取数据
+    mfp_info_t* pInfo = (mfp_info_t*)unzip;
+    char* pData = (char*)(pInfo + hdr.entry_count);
+    MapFile* mfTemp = 0;
+
+    for (int i = 0; i < hdr.entry_count; ++i)
+    {
+        mfTemp = new MapFile();
+        char* child = pData + pInfo[i].offset;
+        mf_hdr_t* ch_hdr = (mf_hdr_t*)child;
+        if (ch_hdr->file_length != pInfo[i].length)
+        {
+            throw DATA_INPUT_ERR;
+        }
+        mfTemp->Import(child);
+        _mfp[mfTemp->title()] = *mfTemp;
+        delete mfTemp;
+    }
+
+    delete [] unzip;
     return 0;
 }

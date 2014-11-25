@@ -6,11 +6,19 @@ Convert Wordbooks made by EBWin to readable UTF-8 text files
 =========
 更新历史:
 
+dev: mfp-done
+[add]添加方法 MapChain::Import
+[fix]潜在的内存泄漏问题 (重要)
+[-->]把所有 new[] 对应的操作由 delete 改为 delete[]
+[fix]MapFile 结构中的输入输出方法应用结构体 mf_hdr_t 后, 方法Import 中 pEntry 的数值错误, 导致 MapChain 中的 Export 方法和 Import 方法不对称
+[-->]MapFile::Import 中语句 char* pEntry = (char*)(hdr); 改为 char* pEntry = (char*)(hdr + 1);
+[-->]输出文件一致性已通过 CRC-32 校验
+
 dev: mfp-export-done
 [fix]调整了从文本文件读入时, Key 的数字部分转换为大写的代码位置. 统一了录入, 导入, 查询时大小写统一
 [fix]没有单独的计算 MapFile 长度的操作, 导致 MapChain 的线性保存操作出现冗余
 [-->]为 MapFile 添加 LinearSize 方法, 只计算保存为线性状态时的长度 (线程不安全)
-[mem]在分离 MapFile::LinearSize 方法时，buf_length 的加数 _title.size() +1 之前多了一个分号, 导致最后 0 级压缩后的数据与设想中不匹配
+[mem]在分离 MapFile::LinearSize 方法时，buf_length 的加数 _title.size() + 1 之前多了一个分号, 导致最后 0 级压缩后的数据与设想中不匹配
 [mem]zlib 的 compress2 的第 3 个参数 sourceLen 永远是真实长度, 不要添加分配内存时使用的保护宏
 
 dev: mf-fix & mfp-find

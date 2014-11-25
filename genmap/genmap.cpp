@@ -27,6 +27,9 @@ int wmain(int argc, wchar_t* argv[])
         }
 
         mfp.write(L"o.txt");
+
+        MapChain mfp2(L"o.txt");
+        mfp2.write(L"p.txt");
     }
     catch (int& e)
     {

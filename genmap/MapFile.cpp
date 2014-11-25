@@ -42,7 +42,7 @@ MapFile::MapFile(const wchar_t* InFile)
         _push(temp);
     }
 
-    delete temp;
+    delete [] temp;
     fclose(fp);
     _set_title(InFile);
 }
@@ -114,7 +114,7 @@ static void val_conv(char* s)
     wcpc(1200, temp, ti * 2, 65001, s, taglen, '_', lost);
     s[taglen] = 0;
 
-    delete temp;
+    delete [] temp;
 }
 
 
@@ -132,9 +132,9 @@ void MapFile::_push(const char* Line)
     }
     return;
 Match:
-    char key[10]; // 左边的数值
+    char key[10] = { 0 }; // 左边的数值
 
-    char val[240]; // 右边的对应项（文本）
+    char val[240] = { 0 }; // 右边的对应项（文本）
     sscanf(Line, "%s %s", key, val);
 
     int key_len = strlen(key);
@@ -245,7 +245,7 @@ int MapFile::Import(const char* Buf)
     _book_gbk_enable = hdr->is_book_gbk;
 
     // 开始获取相关信息
-    char* pEntry = (char*)hdr;
+    char* pEntry = (char*)(hdr + 1);
     char temp[32] = { 0 }; // 建立临时存储站点
 
     char* pTemp = temp;
