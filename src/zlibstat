@@ -1,0 +1,11 @@
+﻿
+#ifndef ZLIBSTAT
+#define ZLIBSTAT
+
+#ifdef _DEBUG
+#pragma comment(lib, "../lib/zlibd.lib")
+#else
+#pragma comment(lib, "../lib/zlib.lib")
+#endif
+
+#endif

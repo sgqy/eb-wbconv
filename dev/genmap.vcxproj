@@ -43,9 +43,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)..\_bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\_obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)..\_bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\_obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -68,7 +72,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -80,25 +83,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClInclude Include="../src/conf.h" />
+    <ClInclude Include="../src/MapChain.h" />
+    <ClInclude Include="../src/MapFile.h" />
+    <ClInclude Include="../src/stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="conf.h" />
-    <ClInclude Include="MapChain.h" />
-    <ClInclude Include="MapFile.h" />
-    <ClInclude Include="stdafx.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="genmap.cpp" />
-    <ClCompile Include="getopt.cpp" />
-    <ClCompile Include="MapChain.cpp" />
-    <ClCompile Include="MapFile.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="../src/genmap.cpp" />
+    <ClCompile Include="../src/getopt.cpp" />
+    <ClCompile Include="../src/MapChain.cpp" />
+    <ClCompile Include="../src/MapFile.cpp" />
+    <ClCompile Include="../src/stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="surrogate.cpp" />
-    <ClCompile Include="wcpc_support.cpp" />
+    <ClCompile Include="../src/surrogate.cpp" />
+    <ClCompile Include="../src/wcpc_support.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

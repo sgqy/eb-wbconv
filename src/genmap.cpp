@@ -1,10 +1,12 @@
-// genmap.cpp : ¶¨Òå¿ØÖÆÌ¨Ó¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
+ï»¿
+// genmap.cpp : å®šä¹‰æ§åˆ¶å°åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
 //
 
 #include "stdafx.h"
 #include "conf.h"
 #include "MapFile.h"
 #include "MapChain.h"
+
 
 #include "zlibstat"
 
@@ -38,7 +40,7 @@ int wmain(int argc, wchar_t* argv[])
 {
     try
     {
-        // ´¦Àí²ÎÊı
+        // å¤„ç†å‚æ•°
         if (argc < 2) help();
 
         int opt = 0;
@@ -63,7 +65,7 @@ int wmain(int argc, wchar_t* argv[])
         argc -= optind;
         argv += optind;
 
-        // ¿ªÊ¼×éºÏ map ÎÄ¼ş
+        // å¼€å§‹ç»„åˆ map æ–‡ä»¶
         MapChain mfp;
         try
         {
@@ -78,7 +80,7 @@ int wmain(int argc, wchar_t* argv[])
                 throw e;
         }
         
-        // ÎŞÂÛÈçºÎ, mfp ¶¼¿ÉÒÔÌí¼Ó/Ìæ»»ÄÚÈİÁË
+        // æ— è®ºå¦‚ä½•, mfp éƒ½å¯ä»¥æ·»åŠ /æ›¿æ¢å†…å®¹äº†
 
         for (int i = 0; i < argc; ++i)
         {

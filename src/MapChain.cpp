@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "conf.h"
 
 #include "MapFile.h"
@@ -64,18 +64,18 @@ int MapChain::exchange(std::string& Rslt, const std::string& Key, const std::str
     auto book = _mfp.find(Title);
     if (book == _mfp.end())
     {
-        char key_cnv[10] = { 0 }; // Ö»°ÑÊı×Ö±ä³É´óĞ´
+        char key_cnv[10] = { 0 }; // åªæŠŠæ•°å­—å˜æˆå¤§å†™
         int key_len = Key.size();
 
         for (int i = 0; i < key_len; ++i)
         {
             if (i >= 2 && i < key_len - 1)
             {
-                key_cnv[i] = toupper(Key[i]); // Êı×Ö²¿·Ö
+                key_cnv[i] = toupper(Key[i]); // æ•°å­—éƒ¨åˆ†
             }
             else
             {
-                key_cnv[i] = Key[i]; // '&h' ºÍ ';'
+                key_cnv[i] = Key[i]; // '&h' å’Œ ';'
             }
         }
 
@@ -92,12 +92,12 @@ int MapChain::exchange(std::string& Rslt, const std::string& Key, const std::str
 
 int MapChain::Export(char*& Buf) const
 {
-    // ËÑ¼¯³õÊ¼ÎÄ¼şÍ·ĞÅÏ¢
+    // æœé›†åˆå§‹æ–‡ä»¶å¤´ä¿¡æ¯
     mfp_hdr_t hdr = { 0 };
     hdr.hdr_length = sizeof(mfp_hdr_t);
     hdr.entry_count = _mfp.size();
 
-    // ½¨Á¢ÎÄ¼şÁĞ±í (°üº¬ÓÚ±»Ñ¹Ëõ²¿·Ö)
+    // å»ºç«‹æ–‡ä»¶åˆ—è¡¨ (åŒ…å«äºè¢«å‹ç¼©éƒ¨åˆ†)
     mfp_info_t* pInfo = new mfp_info_t[hdr.entry_count];
     hdr.info_length = hdr.entry_count * sizeof(mfp_info_t);
 
@@ -105,7 +105,7 @@ int MapChain::Export(char*& Buf) const
     auto it = _mfp.begin();
     int i = 0;
 
-    // Ğ´ÈëÁĞ±íÊı¾İ, ¼ÆËãÎ´Ñ¹Ëõ³¤¶È
+    // å†™å…¥åˆ—è¡¨æ•°æ®, è®¡ç®—æœªå‹ç¼©é•¿åº¦
     int offset = 0;
     for (/* i = 0, it = beg */; it != it_end && i < hdr.entry_count; ++it, ++i)
     {
@@ -115,7 +115,7 @@ int MapChain::Export(char*& Buf) const
 
     hdr.unzip_size = hdr.info_length + offset;
 
-    // ¿ªÊ¼Â¼Èë
+    // å¼€å§‹å½•å…¥
     char* Raw = new char[mem_s(hdr.unzip_size)];
     memcpy(Raw, pInfo, hdr.info_length);
     delete [] pInfo;
@@ -126,19 +126,19 @@ int MapChain::Export(char*& Buf) const
         pRaw += it->second.Export(pRaw);
     }
 
-    // Ñ¹Ëõ
+    // å‹ç¼©
     char* Zipped = new char[mem_s(hdr.unzip_size)];
     int zipped_size = mem_s(hdr.unzip_size);
     if (compress2((Bytef*)Zipped, (uLongf*)&zipped_size,
         (Bytef*)Raw, hdr.unzip_size, 9) != Z_OK)
-        // µÚ 3 ¸ö²ÎÊı sourceLen ÓÀÔ¶ÊÇÕæÊµ³¤¶È, ²»ÒªÌí¼Ó±£»¤ºê
+        // ç¬¬ 3 ä¸ªå‚æ•° sourceLen æ°¸è¿œæ˜¯çœŸå®é•¿åº¦, ä¸è¦æ·»åŠ ä¿æŠ¤å®
     {
         throw ZIP_ERROR;
     }
     hdr.zipped_size = zipped_size;
     delete [] Raw;
 
-    // Êä³ö
+    // è¾“å‡º
     delete [] Buf;
     Buf = new char[mem_s(hdr.hdr_length + hdr.zipped_size)];
     memcpy(Buf, &hdr, hdr.hdr_length);
@@ -153,7 +153,7 @@ int MapChain::Import(const char* Buf)
     mfp_hdr_t* phdr = (mfp_hdr_t*)Buf;
     mfp_hdr_t hdr = *phdr;
 
-    // ½âÑ¹
+    // è§£å‹
     const char* zipped = (char*)(phdr + 1);
 
     // |mfp_info|data
@@ -169,7 +169,7 @@ int MapChain::Import(const char* Buf)
         throw DATA_INPUT_ERR;
     }
 
-    // ¶ÁÈ¡Êı¾İ
+    // è¯»å–æ•°æ®
     mfp_info_t* pInfo = (mfp_info_t*)unzip;
     char* pData = (char*)(pInfo + hdr.entry_count);
     MapFile* mfTemp = 0;

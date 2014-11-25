@@ -1,3 +1,4 @@
+ï»¿
 #pragma once
 
 #pragma pack(1)
@@ -24,7 +25,7 @@ struct mfp_info_t
 
 #pragma pack()
 
-// ¶à¸öÎÄ¼ş±£´æ
+// å¤šä¸ªæ–‡ä»¶ä¿å­˜
 class MapChain
 {
     // <title, map_file>
@@ -32,26 +33,26 @@ class MapChain
 public:
     MapChain();
 
-    // ´ÓÎÄ¼ş´´½¨
+    // ä»æ–‡ä»¶åˆ›å»º
     MapChain(const wchar_t* InFile);
 
-    // ´ÓÎÄ¼ş¶ÁÈë, ĞèÒª wmain µÄÖ§³Ö
+    // ä»æ–‡ä»¶è¯»å…¥, éœ€è¦ wmain çš„æ”¯æŒ
     void read(const wchar_t* InFile);
     
-    // Ğ´ÈëÎÄ¼ş
+    // å†™å…¥æ–‡ä»¶
     void write(const wchar_t* OutFile) const;
 
-    // »ñÈ¡Åä¶Ô
+    // è·å–é…å¯¹
     // Input: "&hA001;", "DICNAME"  Output: UTF-8 String
     int exchange(std::string& Rslt, const std::string& Key, const std::string& Title) const;
     
-    // ÏßĞÔ±£´æÊı¾İ, ·µ»Ø Buf µÄ³¤¶È
+    // çº¿æ€§ä¿å­˜æ•°æ®, è¿”å› Buf çš„é•¿åº¦
     // WARNING: Allocating memory WITHOUT delete!!!
     int Export(char*& Buf) const;
 
-    // ´ÓÏßĞÔ´æ´¢ÖĞ°´¸ñÊ½¶ÁÈ¡ÀàµÄÊı¾İ, ·µ»ØÌõÄ¿µÄÊıÁ¿
+    // ä»çº¿æ€§å­˜å‚¨ä¸­æŒ‰æ ¼å¼è¯»å–ç±»çš„æ•°æ®, è¿”å›æ¡ç›®çš„æ•°é‡
     int Import(const char* Buf);
 
-    // ×é×° MapFile ½á¹¹
+    // ç»„è£… MapFile ç»“æ„
     MapChain& operator += (const MapFile&);
 };

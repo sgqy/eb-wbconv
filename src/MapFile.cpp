@@ -1,3 +1,4 @@
+ï»¿
 #include "stdafx.h"
 #include "conf.h"
 
@@ -25,7 +26,7 @@ MapFile::MapFile()
 
 MapFile::MapFile(const wchar_t* InFile)
 {
-    mf_init(); // Òªµ¥¶ÀÉè¼ÆÒ»¸ö³õÊ¼»¯º¯Êı, ²»Òªµ÷ÓÃÆäËû¹¹Ôìº¯Êı
+    mf_init(); // è¦å•ç‹¬è®¾è®¡ä¸€ä¸ªåˆå§‹åŒ–å‡½æ•°, ä¸è¦è°ƒç”¨å…¶ä»–æ„é€ å‡½æ•°
 
     FILE* fp = 0;
     _wfopen_s(&fp, InFile, L"r"); // MSVC
@@ -96,7 +97,7 @@ static void val_conv(char* s)
         }
     }
 
-    // ½¨Á¢ÁÙÊ±ÇøÓò
+    // å»ºç«‹ä¸´æ—¶åŒºåŸŸ
     wchar_t* temp = 0;
     temp = new wchar_t[40];
     int ti = 0;
@@ -106,8 +107,8 @@ static void val_conv(char* s)
     while (1)
     {
         utf16 = strtol(si, &si, 16);
-        if (!utf16) break; // Óöµ½ 0 ÔòÌø³ö, Èç¹ûÎŞĞÅÏ¢, Ôò wchar_t temp[] Îª¿Õ, ×îÖÕ½á¹ûÎª¿Õ
-        ti += utf16_to_ucs2(temp + ti, utf16); // ¶Ô \u010000 µ½ \u10FFFF ½øĞĞ¶ÔÓ¦´¦Àí
+        if (!utf16) break; // é‡åˆ° 0 åˆ™è·³å‡º, å¦‚æœæ— ä¿¡æ¯, åˆ™ wchar_t temp[] ä¸ºç©º, æœ€ç»ˆç»“æœä¸ºç©º
+        ti += utf16_to_ucs2(temp + ti, utf16); // å¯¹ \u010000 åˆ° \u10FFFF è¿›è¡Œå¯¹åº”å¤„ç†
     }
     int taglen = 0;
     bool lost = false;
@@ -124,7 +125,7 @@ void MapFile::_push(const char* Line)
     switch (Line[0])
     {
     case 'g':
-        _book_gbk_enable = ENABLE_GBK_CONV; // ¶ÔÓ¦±í±¾ÉíÖ§³Ö GBK, ºÍÏµÍ³ÎŞ¹Ø!
+        _book_gbk_enable = ENABLE_GBK_CONV; // å¯¹åº”è¡¨æœ¬èº«æ”¯æŒ GBK, å’Œç³»ç»Ÿæ— å…³!
     case 'h':
     case 'z':
     case 'c':
@@ -132,9 +133,9 @@ void MapFile::_push(const char* Line)
     }
     return;
 Match:
-    char key[10] = { 0 }; // ×ó±ßµÄÊıÖµ
+    char key[10] = { 0 }; // å·¦è¾¹çš„æ•°å€¼
 
-    char val[240] = { 0 }; // ÓÒ±ßµÄ¶ÔÓ¦Ïî£¨ÎÄ±¾£©
+    char val[240] = { 0 }; // å³è¾¹çš„å¯¹åº”é¡¹ï¼ˆæ–‡æœ¬ï¼‰
     sscanf(Line, "%s %s", key, val);
 
     int key_len = strlen(key);
@@ -143,12 +144,12 @@ Match:
         key[i] = toupper(key[i]);
     }
 
-    val_conv(val); // °Ñ¶ÔÓ¦Ïî°üº¬µÄÊı×Ö×ª»»Îª utf-8 ±àÂë
+    val_conv(val); // æŠŠå¯¹åº”é¡¹åŒ…å«çš„æ•°å­—è½¬æ¢ä¸º utf-8 ç¼–ç 
 
     std::string value;
-    if (strlen(val) == 0) // ´Ë½á¹û: Ô­ÎÄ±¾ÓÒ²à¶ÔÓ¦ÏîÎª¿Õ
+    if (strlen(val) == 0) // æ­¤ç»“æœ: åŸæ–‡æœ¬å³ä¾§å¯¹åº”é¡¹ä¸ºç©º
     {
-        // ²»Ö´ĞĞ _map µÄÂ¼Èë²Ù×÷;
+        // ä¸æ‰§è¡Œ _map çš„å½•å…¥æ“ä½œ;
     }
     else
     {
@@ -162,38 +163,38 @@ int MapFile::exchange(std::string& Rslt, const std::string& Key) const
 {
     int ret = FIND_SUCCESS;
 
-    char key_cnv[10] = { 0 }; // Ö»°ÑÊı×Ö±ä³É´óĞ´
-    char key_raw[10] = { 0 }; // ÓÃÓÚ²éÑ¯µÄ²¿·Ö
+    char key_cnv[10] = { 0 }; // åªæŠŠæ•°å­—å˜æˆå¤§å†™
+    char key_raw[10] = { 0 }; // ç”¨äºæŸ¥è¯¢çš„éƒ¨åˆ†
     int key_len = Key.size();
 
     for (int i = 0; i < key_len; ++i)
     {
         if (i >= 2 && i < key_len - 1)
         {
-            key_raw[i-1] = key_cnv[i] = toupper(Key[i]); // Êı×Ö²¿·Ö, ×¢Òâ²»ÊÇ i-2
+            key_raw[i-1] = key_cnv[i] = toupper(Key[i]); // æ•°å­—éƒ¨åˆ†, æ³¨æ„ä¸æ˜¯ i-2
         }
         else if (i == 1)
         {
-            key_raw[i-1] = key_cnv[i] = Key[i]; // chgz ËÄ¸ö¿ªÍ·
+            key_raw[i-1] = key_cnv[i] = Key[i]; // chgz å››ä¸ªå¼€å¤´
         }
         else
         {
-            key_cnv[i] = Key[i]; // '&' ºÍ ';'
+            key_cnv[i] = Key[i]; // '&' å’Œ ';'
         }
     }
 
-    std::string Raw = key_raw; // ²»Ó¦°üº¬Ä©Î²µÄ·ÖºÅ
+    std::string Raw = key_raw; // ä¸åº”åŒ…å«æœ«å°¾çš„åˆ†å·
 
-    ////////////// ¿ªÊ¼Ìæ»» //////////////
+    ////////////// å¼€å§‹æ›¿æ¢ //////////////
 
     // original: std::map<std::string, std::string>::const_iterator
     auto it = _map.find(Raw);
-    if (it == _map.end()) // ±íÖĞ²»´æÔÚ½á¹û
+    if (it == _map.end()) // è¡¨ä¸­ä¸å­˜åœ¨ç»“æœ
     {
         if (Raw[0] == 'g'
             && _book_gbk_enable == ENABLE_GBK_CONV
             && _sys_gbk_enable == ENABLE_GBK_CONV
-            ) // °üº¬ gbk ¶ÔÕÕµÄÖ±½Ó½âÂë
+            ) // åŒ…å« gbk å¯¹ç…§çš„ç›´æ¥è§£ç 
         {
             unsigned char gbk[4] = { 0 }; // length: 2
             char cnv[12] = { 0 }; // length: 3~4
@@ -217,7 +218,7 @@ int MapFile::exchange(std::string& Rslt, const std::string& Key) const
             ret = FIND_FALLBACK;
         }
     }
-    else // ±íÖĞ´æÔÚ½á¹û. ¸üĞÂ: Èô²éÑ¯µ½½á¹û, Ôò±ØÓĞ¶ÔÓ¦Ïî
+    else // è¡¨ä¸­å­˜åœ¨ç»“æœ. æ›´æ–°: è‹¥æŸ¥è¯¢åˆ°ç»“æœ, åˆ™å¿…æœ‰å¯¹åº”é¡¹
     {
         Rslt = it->second;
     }
@@ -235,21 +236,21 @@ const std::string& MapFile::title() const
     return _title;
 }
 
-// ´ÓÏßĞÔ´æ´¢ÖĞ¶ÁÈ¡ MapFile ½á¹¹, ·µ»Øµ¼ÈëÌõÄ¿
+// ä»çº¿æ€§å­˜å‚¨ä¸­è¯»å– MapFile ç»“æ„, è¿”å›å¯¼å…¥æ¡ç›®
 int MapFile::Import(const char* Buf)
 {
-    // »ñµÃÊı¾İ
+    // è·å¾—æ•°æ®
     mf_hdr_t* hdr = (mf_hdr_t*)Buf;
     int buf_length = hdr->file_length;
     int entry_count = hdr->entry_count;
     _book_gbk_enable = hdr->is_book_gbk;
 
-    // ¿ªÊ¼»ñÈ¡Ïà¹ØĞÅÏ¢
+    // å¼€å§‹è·å–ç›¸å…³ä¿¡æ¯
     char* pEntry = (char*)(hdr + 1);
-    char temp[32] = { 0 }; // ½¨Á¢ÁÙÊ±´æ´¢Õ¾µã
+    char temp[32] = { 0 }; // å»ºç«‹ä¸´æ—¶å­˜å‚¨ç«™ç‚¹
 
     char* pTemp = temp;
-    while (*pTemp++ = *pEntry++); // »ñÈ¡´ÇµäÃû³Æ
+    while (*pTemp++ = *pEntry++); // è·å–è¾å…¸åç§°
     _title = temp;
 
     std::string Key;
@@ -270,7 +271,7 @@ int MapFile::Import(const char* Buf)
     return entry_count;
 }
 
-// ÏßĞÔ±£´æ MapFile ½á¹¹ÀïµÄÄÚÈİ, ·µ»Ø»º³åÇø´óĞ¡
+// çº¿æ€§ä¿å­˜ MapFile ç»“æ„é‡Œçš„å†…å®¹, è¿”å›ç¼“å†²åŒºå¤§å°
 int MapFile::Export(char* Buf) const
 {
     int buf_length = LinearSize();
@@ -278,14 +279,14 @@ int MapFile::Export(char* Buf) const
 
     auto it_end = _map.end();
 
-    // Ğ´ÈëÊı¾İ
+    // å†™å…¥æ•°æ®
     mf_hdr_t* hdr = (mf_hdr_t*)Buf;
     hdr->file_length = buf_length;
     hdr->entry_count = entry_count;
     hdr->is_book_gbk = _book_gbk_enable;
     ++hdr;
 
-    // ¿ªÊ¼Â¼Èë
+    // å¼€å§‹å½•å…¥
     char* pEntry = (char*)hdr;
     const char* pSour = 0;
     pSour = _title.c_str();
@@ -311,7 +312,7 @@ int MapFile::LinearSize() const
 
     auto it_end = _map.end();
 
-    // ¼ÆËãÊä³öÇø³¤¶È
+    // è®¡ç®—è¾“å‡ºåŒºé•¿åº¦
     for (auto it = _map.begin(); it != it_end; ++it)
     {
         buf_length += it->first.size() + 1;

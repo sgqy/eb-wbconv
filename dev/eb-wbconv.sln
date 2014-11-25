@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genmap", "genmap.vcxproj", "{21CE39C6-FFA5-4667-8A24-5142EBAE93BE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbconv", "wbconv.vcxproj", "{0731F314-3F41-4DA6-8FFA-466D944B6B6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21CE39C6-FFA5-4667-8A24-5142EBAE93BE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{21CE39C6-FFA5-4667-8A24-5142EBAE93BE}.Debug|Win32.Build.0 = Debug|Win32
+		{21CE39C6-FFA5-4667-8A24-5142EBAE93BE}.Release|Win32.ActiveCfg = Release|Win32
+		{21CE39C6-FFA5-4667-8A24-5142EBAE93BE}.Release|Win32.Build.0 = Release|Win32
+		{0731F314-3F41-4DA6-8FFA-466D944B6B6B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0731F314-3F41-4DA6-8FFA-466D944B6B6B}.Debug|Win32.Build.0 = Debug|Win32
+		{0731F314-3F41-4DA6-8FFA-466D944B6B6B}.Release|Win32.ActiveCfg = Release|Win32
+		{0731F314-3F41-4DA6-8FFA-466D944B6B6B}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

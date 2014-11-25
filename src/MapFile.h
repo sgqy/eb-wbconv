@@ -1,3 +1,4 @@
+ï»¿
 #pragma once
 
 #pragma pack(1)
@@ -12,50 +13,50 @@ struct mf_hdr_t
 
 #pragma pack()
 
-// ¶Ôµ¥¸öÎÄ¼ş½øĞĞ±£´æ
+// å¯¹å•ä¸ªæ–‡ä»¶è¿›è¡Œä¿å­˜
 class MapFile
 {
-    std::string _title; // ´ÊµäÃû³Æ£¨ÖØÒª£©
+    std::string _title; // è¯å…¸åç§°ï¼ˆé‡è¦ï¼‰
     std::map<std::string, std::string> _map;
-    int _len; // map µÄ³¤¶È£¬ÓÃÓÚÎÄ¼ş´æ´¢
+    int _len; // map çš„é•¿åº¦ï¼Œç”¨äºæ–‡ä»¶å­˜å‚¨
 
-    // ´¦Àíµ¥ĞĞ
+    // å¤„ç†å•è¡Œ
     void _push(const char* Line);
-    // ÉèÖÃÁĞ±íÃû
+    // è®¾ç½®åˆ—è¡¨å
     void _set_title(const wchar_t* Name);
-    // ³õÊ¼»¯±äÁ¿
+    // åˆå§‹åŒ–å˜é‡
     void mf_init();
 
 //public:
-    // ÒÔÏÂ¶şÕß¾ùÎª ENABLE_GBK_CONV ·½¿É×ª»»
-    int _sys_gbk_enable; // ÏµÍ³»·¾³¼ì²â
-    int _book_gbk_enable; // Êé¼®±¾ÉíÊÇ·ñÖ§³Ö GBK, ×¢ÒâºÍÏµÍ³»·¾³ÎŞ¹Ø
+    // ä»¥ä¸‹äºŒè€…å‡ä¸º ENABLE_GBK_CONV æ–¹å¯è½¬æ¢
+    int _sys_gbk_enable; // ç³»ç»Ÿç¯å¢ƒæ£€æµ‹
+    int _book_gbk_enable; // ä¹¦ç±æœ¬èº«æ˜¯å¦æ”¯æŒ GBK, æ³¨æ„å’Œç³»ç»Ÿç¯å¢ƒæ— å…³
 
 public:
     MapFile();
 
-    // ´ÓÎÄ¼ş¶ÁÈë, ĞèÒª wmain µÄÖ§³Ö
+    // ä»æ–‡ä»¶è¯»å…¥, éœ€è¦ wmain çš„æ”¯æŒ
     MapFile(const wchar_t* InFile);
 
-    // »ñÈ¡Åä¶Ô
+    // è·å–é…å¯¹
     // Input: "&hA001;"  Output: UTF-8 String
     int exchange(std::string& Rslt, const std::string& Key) const;
 
-    // »ñÈ¡Àà³ÉÔ±
+    // è·å–ç±»æˆå‘˜
     const std::string& title() const;
     const std::map<std::string, std::string>& list() const;
 
-    // ´ÓÏßĞÔ´æ´¢ÖĞ°´¸ñÊ½¶ÁÈ¡ÀàµÄÊı¾İ, ·µ»ØÌõÄ¿µÄÊıÁ¿
+    // ä»çº¿æ€§å­˜å‚¨ä¸­æŒ‰æ ¼å¼è¯»å–ç±»çš„æ•°æ®, è¿”å›æ¡ç›®çš„æ•°é‡
     int Import(const char* Buf);
 
-    // ÏßĞÔ±£´æÀàÖĞµÄÊı¾İ, ·µ»Ø Buf µÄ³¤¶È
+    // çº¿æ€§ä¿å­˜ç±»ä¸­çš„æ•°æ®, è¿”å› Buf çš„é•¿åº¦
     // Call LinearSize() to allocate new memory first!
     int Export(char* Buf) const;
 
-    // ¼ÆËãÏßĞÔ±£´æÊı¾İµÄ³¤¶È
+    // è®¡ç®—çº¿æ€§ä¿å­˜æ•°æ®çš„é•¿åº¦
     int LinearSize() const;
 
-    // ¶ş½øÖÆ±£´æ¸ñÊ½:
+    // äºŒè¿›åˆ¶ä¿å­˜æ ¼å¼:
     //struct fmt
     //{
     //    int buf_length;

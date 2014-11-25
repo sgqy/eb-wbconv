@@ -1,3 +1,4 @@
+﻿
 #ifndef SURROGATE_H_INCLUDED
 #define SURROGATE_H_INCLUDED
 

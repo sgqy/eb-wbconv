@@ -1,12 +1,12 @@
-
-// ´ËÎÄ¼şÀ´×ÔÏîÄ¿ wcpc.
+ï»¿
+// æ­¤æ–‡ä»¶æ¥è‡ªé¡¹ç›® wcpc.
 // https://github.com/wiki908/wcpc
-// ×¢Òâ×ª»»Ç°ºó³¤¶È¾ùÖ¸×Ö½ÚÊı£¬·Ç×Ö·ûÊı
+// æ³¨æ„è½¬æ¢å‰åé•¿åº¦å‡æŒ‡å­—èŠ‚æ•°ï¼Œéå­—ç¬¦æ•°
 
 #include "stdafx.h"
 #include "conf.h"
 
-#define SENTENCE_LEN 4096 // Ã¿ĞĞ×î´ó³¤¶È 4 MiB // ºóĞø°æ±¾½«Ìí¼Ó×Ô¶¨Òå»º´æÈİÁ¿
+#define SENTENCE_LEN 4096 // æ¯è¡Œæœ€å¤§é•¿åº¦ 4 MiB // åç»­ç‰ˆæœ¬å°†æ·»åŠ è‡ªå®šä¹‰ç¼“å­˜å®¹é‡
 #define MEMPROTECT mem_s
 
 inline void reverse_utf16(wchar_t* ws, const int wsl)
@@ -20,11 +20,11 @@ void wcpc(const int scp, const void* src, const int srcl,
     const int tcp, void* tag, int& tagl,
     const char dft, bool& islost)
 {
-    wchar_t* wstmp = new wchar_t[MEMPROTECT(SENTENCE_LEN * 2)]; // ½¨Á¢»º´æÓÃÓÚÉú³É UTF-16 ĞòÁĞ
+    wchar_t* wstmp = new wchar_t[MEMPROTECT(SENTENCE_LEN * 2)]; // å»ºç«‹ç¼“å­˜ç”¨äºç”Ÿæˆ UTF-16 åºåˆ—
 
-    int wslen = 0; // wstmp ÖĞ UTF-16 ĞòÁĞµÄ³¤¶È, °´ÕÕ wchar_t ¼ÆËã, ºÍ WinAPI ±£³ÖÒ»ÖÂ
+    int wslen = 0; // wstmp ä¸­ UTF-16 åºåˆ—çš„é•¿åº¦, æŒ‰ç…§ wchar_t è®¡ç®—, å’Œ WinAPI ä¿æŒä¸€è‡´
 
-    switch (scp) { // ´úÂëÒ³
+    switch (scp) { // ä»£ç é¡µ
     case 1200: // UTF-16LE
         memcpy_s(wstmp, MEMPROTECT(SENTENCE_LEN * 2), src, srcl + 1);
         wslen = (srcl + 1) / 2;
@@ -49,7 +49,7 @@ void wcpc(const int scp, const void* src, const int srcl,
         break;
     default: // UTF-8 || ANSI
         int lost = 0;
-        int* plost = (tcp == 65001) ? NULL : &lost; // UTF-8 µÄ»°ÓĞ BUG ...
+        int* plost = (tcp == 65001) ? NULL : &lost; // UTF-8 çš„è¯æœ‰ BUG ...
         const char* pdft = (tcp == 65001) ? NULL : &dft;
         tagl = WideCharToMultiByte(tcp, 0, wstmp, wslen, NULL, NULL, pdft, plost);
         WideCharToMultiByte(tcp, 0, wstmp, wslen, (LPSTR)tag, tagl, pdft, plost);
@@ -61,5 +61,5 @@ void wcpc(const int scp, const void* src, const int srcl,
         }
     }
 
-    delete[] wstmp; // Çå¿Õ»º´æ
+    delete[] wstmp; // æ¸…ç©ºç¼“å­˜
 }
