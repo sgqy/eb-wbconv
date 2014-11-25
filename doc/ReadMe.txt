@@ -10,6 +10,7 @@ And printing them is just wasting paper :(
 The newest version EBWin4 do not support wordbook,
 but it gives you some latest map files in your user-dir.
 
+! Some items is not complete. This maybe a bug of EBWin
 
 This toolkit is designed for convert you wordbook to readable UTF-8 text.
 
