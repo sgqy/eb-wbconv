@@ -78,8 +78,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      
-<AdditionalDependencies>wsetargv.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsetargv.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -88,6 +87,7 @@
     <ClInclude Include="../src/MapChain.h" />
     <ClInclude Include="../src/MapFile.h" />
     <ClInclude Include="../src/stdafx.h" />
+    <ClInclude Include="..\src\WBFile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../src/wbconv.cpp" />
@@ -100,6 +100,7 @@
     </ClCompile>
     <ClCompile Include="../src/surrogate.cpp" />
     <ClCompile Include="../src/wcpc_support.cpp" />
+    <ClCompile Include="..\src\WBFile.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

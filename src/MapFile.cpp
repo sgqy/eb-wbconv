@@ -84,6 +84,12 @@ void MapFile::_set_title(const wchar_t* Name)
 
 static void val_conv(char* s)
 {
+    if (s[0] == '-')
+    {
+        s[0] = 0;
+        return;
+    }
+    if (s[0] != 'u') return; // 直接使用已定义的 UTF-8 解码格式的串
     int len = strlen(s);
     for (int i = 0; i < len; ++i)
     {

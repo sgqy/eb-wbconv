@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genmap", "genmap.vcxproj", "{21CE39C6-FFA5-4667-8A24-5142EBAE93BE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbconv", "wbconv.vcxproj", "{0731F314-3F41-4DA6-8FFA-466D944B6B6B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{21CE39C6-FFA5-4667-8A24-5142EBAE93BE} = {21CE39C6-FFA5-4667-8A24-5142EBAE93BE}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

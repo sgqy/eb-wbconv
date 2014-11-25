@@ -12,13 +12,7 @@
 
 using namespace std;
 
-void get_zmp_name(wchar_t* zmp, const wchar_t* arg0)
-{
-    wcscpy(zmp, arg0);
-    wchar_t* find = wcsrchr(zmp, L'\\');
-    if(find) wcscpy(find, L"\\GAIJI.ZMP");
-    else wcscpy(zmp, L".\\GAIJI.ZMP");
-}
+#include "zmpname"
 
 enum mode_e
 {

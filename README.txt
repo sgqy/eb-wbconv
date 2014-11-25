@@ -6,6 +6,11 @@ Convert Wordbooks made by EBWin to readable UTF-8 text files
 =========
 更新历史:
 
+wbconv: v0.8
+[inf]没有做足够的测试, 似乎有不少潜在的问题, 版本定为 v0.8
+[fix]实测后发现不少 Gaiji Map 有未定义项
+[-->]放宽列表录入条件, 支持直接对应 UTF-8 串 (不要以 u 和 - 开头)
+
 arrange project
 由于两个项目有大量重复文件, 现进行归类整理
 [mod]修改所有源文件的编码和行尾
