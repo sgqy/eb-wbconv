@@ -6,6 +6,12 @@ Convert Wordbooks made by EBWin to readable UTF-8 text files
 =========
 更新历史:
 
+genmap: v1.0
+Generate Mapfile ver 1.0 完成
+用于把 map 文件整合进 GAIJI.ZMP 文件中, 以加速 wbconv 的处理速度
+程序中带有简易使用方法
+详细使用说明书将在全部项目完成后编写
+
 dev: mfp-done
 [add]添加方法 MapChain::Import
 [fix]潜在的内存泄漏问题 (重要)

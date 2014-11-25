@@ -12,6 +12,11 @@ MapChain::MapChain()
 
 MapChain::MapChain(const wchar_t* InFile)
 {
+    read(InFile);
+}
+
+void MapChain::read(const wchar_t* InFile)
+{
     FILE* fp = 0;
     _wfopen_s(&fp, InFile, L"rb"); // MSVC
 
@@ -28,10 +33,10 @@ MapChain::MapChain(const wchar_t* InFile)
 
     Import(buf);
 
-    delete [] buf;
+    delete[] buf;
 }
 
-void MapChain::write(const wchar_t* OutFile)
+void MapChain::write(const wchar_t* OutFile) const
 {
     FILE* fp = 0;
     _wfopen_s(&fp, OutFile, L"wb+"); // MSVC

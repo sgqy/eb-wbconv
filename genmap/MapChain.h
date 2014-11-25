@@ -32,11 +32,14 @@ class MapChain
 public:
     MapChain();
 
-    // 从文件读入, 需要 wmain 的支持
+    // 从文件创建
     MapChain(const wchar_t* InFile);
 
+    // 从文件读入, 需要 wmain 的支持
+    void read(const wchar_t* InFile);
+    
     // 写入文件
-    void write(const wchar_t* OutFile);
+    void write(const wchar_t* OutFile) const;
 
     // 获取配对
     // Input: "&hA001;", "DICNAME"  Output: UTF-8 String

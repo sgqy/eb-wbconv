@@ -18,7 +18,6 @@
 // Safe malloc
 #define mem_s(x) (x+128)
 
-
 extern void wcpc(const int scp, const void* src, const int srcl,
     const int tcp, void* tag, int& tagl,
     const char dft, bool& islost);
